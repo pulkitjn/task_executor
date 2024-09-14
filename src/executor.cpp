@@ -22,9 +22,6 @@ Executor::~Executor() {
     m_tpMap.clear();
 }
 
-// Post on queueIndexTh taskQueue and task that you want to execute
-// Each task queue is assoicated with one of the threads
-// Posting to same queue will lead to synchronous execution
 void Executor::Post(uint64_t queueIndex, std::function<void()>&& task) 
 {
     if (IsStopped()) {
@@ -40,11 +37,6 @@ void Executor::Post(uint64_t queueIndex, std::function<void()>&& task)
     m_taskQueues[queueIndex].Post(std::move(task), tp);
 }
 
-// Call this to stop the executor. This will
-// stop all of taskQueues but wont interrupt
-// any function if it is executing at the 
-// time of the stop call, rather it will wait for
-// it to finish
 void Executor::Stop() {
     if (IsStopped()) {
         return;
